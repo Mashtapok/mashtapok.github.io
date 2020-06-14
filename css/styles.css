@@ -1,4 +1,5 @@
 @import "reset.css";
+@import "fullscreen.css";
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap");
 @font-face {
   font-family: "Consolas";
@@ -18,44 +19,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-.fullscreen {
-  min-height: 100vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  transition: transform 250ms;
-  z-index: 10;
-}
-.fullscreen.active {
-  transform: translateY(-100vh);
-}
-.fullscreen__body {
-  width: 563px;
-  font-size: 24px;
-}
-/* .plane {
-    animation-name: plane;
-    animation-duration: 8s;
-}
-
-@keyframes plane {
-    0% {
-      transform: translate(0, 0);
-    }
-    50% {
-        transform: translate(200px, 25px) scale(1.05);
-    }
-    100% {
-      transform: translate(400px, -10px);
-    }
-  } */
-
   main {
     background-color: #85b9dd;
     margin: 0;
