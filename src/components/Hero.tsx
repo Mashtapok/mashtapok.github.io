@@ -1,27 +1,24 @@
 import { ArrowRight } from 'lucide-react';
-import { Cloud, Clouds, useTexture, useVideoTexture } from '@react-three/drei';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { motion } from 'framer-motion';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import {
   ClampToEdgeWrapping,
   LinearFilter,
-  MeshLambertMaterial,
   NoColorSpace,
+  TextureLoader,
   Vector2,
-  type Group,
+  VideoTexture,
   type ShaderMaterial,
 } from 'three';
 import {
-  cloudTexture,
   ease,
   heroDepthMap,
   heroMediaSize,
-  heroVideo,
+  heroVideoSources,
   navItems,
   primaryText,
   profile,
-  showHeroClouds,
 } from '../data';
 import { WordsPullUp } from './TextAnimations';
 
@@ -38,57 +35,87 @@ const heroVideoFragmentShader = `
   uniform sampler2D uVideo;
   uniform sampler2D uDepth;
   uniform vec2 uPointer;
-  uniform vec2 uResolution;
-  uniform vec2 uMediaResolution;
   uniform float uStrength;
 
   varying vec2 vUv;
 
-  vec2 coverUv(vec2 uv) {
-    float screenAspect = uResolution.x / uResolution.y;
-    float mediaAspect = uMediaResolution.x / uMediaResolution.y;
-    vec2 ratio = vec2(
-      min(screenAspect / mediaAspect, 1.0),
-      min(mediaAspect / screenAspect, 1.0)
-    );
-
-    return uv * ratio + (1.0 - ratio) * 0.5;
-  }
-
   void main() {
     vec2 baseUv = mix(vec2(0.5), vUv, 0.94);
-    vec2 depthUv = coverUv(baseUv);
-    float depth = texture2D(uDepth, depthUv).r;
+    float depth = texture2D(uDepth, baseUv).r;
     float nearDepth = smoothstep(0.08, 0.92, depth);
-    vec2 shiftedUv = coverUv(baseUv + uPointer * (nearDepth - 0.35) * uStrength);
+    vec2 shiftedUv = baseUv + uPointer * (nearDepth - 0.35) * uStrength;
     vec3 color = texture2D(uVideo, clamp(shiftedUv, vec2(0.001), vec2(0.999))).rgb;
 
     gl_FragColor = vec4(color, 1.0);
   }
 `;
 
+function useHeroVideoTexture(sources: typeof heroVideoSources) {
+  const { gl } = useThree();
+  const texture = useMemo(() => {
+    const video = Object.assign(document.createElement('video'), {
+      crossOrigin: 'anonymous',
+      loop: true,
+      muted: true,
+      playsInline: true,
+      preload: 'auto',
+    });
+
+    sources.forEach(({ src, type }) => {
+      const source = document.createElement('source');
+
+      source.src = src;
+      source.type = type;
+      video.appendChild(source);
+    });
+
+    const videoTexture = new VideoTexture(video);
+
+    videoTexture.colorSpace = gl.outputColorSpace;
+
+    return videoTexture;
+  }, [gl.outputColorSpace, sources]);
+
+  useEffect(() => {
+    const video = texture.source.data as HTMLVideoElement;
+
+    video.load();
+    const playPromise = video.play();
+
+    playPromise?.catch(() => undefined);
+
+    return () => {
+      video.pause();
+      video.replaceChildren();
+      video.load();
+      texture.dispose();
+    };
+  }, [texture]);
+
+  return texture;
+}
+
 function HeroVideoPlane() {
   const materialRef = useRef<ShaderMaterial>(null);
   const pointerTarget = useRef(new Vector2(0, 0));
   const pointer = useRef(new Vector2(0, 0));
-  const { size, viewport } = useThree();
-  const videoTexture = useVideoTexture(heroVideo, {
-    crossOrigin: 'anonymous',
-    muted: true,
-    loop: true,
-    playsInline: true,
-  });
-  const depthTexture = useTexture(heroDepthMap);
+  const { viewport } = useThree();
+  const videoTexture = useHeroVideoTexture(heroVideoSources);
+  const depthTexture = useLoader(TextureLoader, heroDepthMap);
+  const mediaAspect = heroMediaSize[0] / heroMediaSize[1];
+  const viewportAspect = viewport.width / viewport.height;
+  const planeScale: [number, number, number] =
+    viewportAspect > mediaAspect
+      ? [viewport.width, viewport.width / mediaAspect, 1]
+      : [viewport.height * mediaAspect, viewport.height, 1];
   const uniforms = useMemo(
     () => ({
       uVideo: { value: videoTexture },
       uDepth: { value: depthTexture },
       uPointer: { value: new Vector2(0, 0) },
-      uResolution: { value: new Vector2(size.width, size.height) },
-      uMediaResolution: { value: new Vector2(heroMediaSize[0], heroMediaSize[1]) },
       uStrength: { value: 0.01 },
     }),
-    [depthTexture, size.height, size.width, videoTexture],
+    [depthTexture, videoTexture],
   );
 
   useEffect(() => {
@@ -124,11 +151,10 @@ function HeroVideoPlane() {
 
     pointer.current.lerp(pointerTarget.current, 0.045);
     materialRef.current.uniforms.uPointer.value.copy(pointer.current);
-    materialRef.current.uniforms.uResolution.value.set(size.width, size.height);
   });
 
   return (
-    <mesh scale={[viewport.width, viewport.height, 1]}>
+    <mesh scale={planeScale}>
       <planeGeometry args={[1, 1]} />
       <shaderMaterial
         ref={materialRef}
@@ -150,110 +176,18 @@ function HeroVideoLayer() {
   );
 }
 
-type DriftingCloudProps = {
-  seed: number;
-  start: number;
-  y: number;
-  z: number;
-  scale: [number, number, number];
-  bounds: [number, number, number];
-  volume: number;
-  opacity: number;
-};
-
-function DriftingCloud({ seed, start, y, z, scale, bounds, volume, opacity }: DriftingCloudProps) {
-  const ref = useRef<Group>(null);
-
-  useFrame(({ clock }) => {
-    if (!ref.current) {
-      return;
-    }
-
-    const travelWidth = 38;
-    ref.current.position.x = -19 + ((clock.elapsedTime * 0.16 + start) % travelWidth);
-    ref.current.position.y = y + Math.sin(clock.elapsedTime * 0.12 + seed) * 0.18;
-  });
-
-  return (
-    <Cloud
-      ref={ref}
-      seed={seed}
-      position={[-19 + start, y, z]}
-      scale={scale}
-      bounds={bounds}
-      volume={volume}
-      opacity={opacity}
-      color="#ffd0a3"
-      fade={24}
-      segments={32}
-      speed={0.025}
-      growth={2.5}
-    />
-  );
-}
-
-function HeroCloudLayer() {
-  return (
-    <Canvas
-      className="h-full w-full"
-      camera={{ position: [0, 0, 14], fov: 38 }}
-      dpr={[1, 1.5]}
-      gl={{ alpha: true, antialias: true }}
-    >
-      <Suspense fallback={null}>
-        <ambientLight color="#ffc188" intensity={1.15} />
-        <directionalLight color="#ff9152" intensity={3.2} position={[-8, 4, 7]} />
-        <pointLight color="#ffd2a3" intensity={1.6} position={[-6, -2, 5]} />
-        <Clouds texture={cloudTexture} material={MeshLambertMaterial} limit={120} frustumCulled={false}>
-          <DriftingCloud
-            seed={4}
-            start={0}
-            y={2.1}
-            z={0}
-            scale={[1.6, 0.85, 1]}
-            bounds={[6.5, 1.3, 1.4]}
-            volume={7}
-            opacity={0.36}
-          />
-          <DriftingCloud
-            seed={12}
-            start={13}
-            y={0.95}
-            z={-1.4}
-            scale={[2, 0.9, 1]}
-            bounds={[7.5, 1.2, 1.3]}
-            volume={6.5}
-            opacity={0.3}
-          />
-          <DriftingCloud
-            seed={21}
-            start={26}
-            y={2.85}
-            z={-2}
-            scale={[1.35, 0.75, 1]}
-            bounds={[5.5, 1, 1.1]}
-            volume={5.5}
-            opacity={0.28}
-          />
-        </Clouds>
-      </Suspense>
-    </Canvas>
-  );
-}
-
 export function Hero() {
   return (
     <section className="h-screen bg-black p-4 md:p-6">
       <div className="relative h-full overflow-hidden rounded-2xl md:rounded-[2rem]">
-        <video className="absolute inset-0 z-0 h-full w-full object-cover" src={heroVideo} autoPlay loop muted playsInline />
+        <video className="absolute inset-0 z-0 h-full w-full object-cover" autoPlay loop muted playsInline preload="auto">
+          {heroVideoSources.map((source) => (
+            <source key={source.src} src={source.src} type={source.type} />
+          ))}
+        </video>
         <div className="pointer-events-none absolute inset-0 z-[1]">
           <HeroVideoLayer />
         </div>
-        {showHeroClouds ? (
-          <div className="pointer-events-none absolute inset-0 z-[2]">
-            <HeroCloudLayer />
-          </div>
-        ) : null}
         <div className="noise-overlay pointer-events-none absolute inset-0 z-[3] opacity-[0.7] mix-blend-overlay" />
         <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
@@ -292,15 +226,6 @@ export function Hero() {
             </div>
 
             <div className="col-span-12 flex max-w-xl flex-col items-start gap-5 justify-self-start sm:max-w-md lg:col-span-4 lg:justify-self-end">
-              <motion.p
-                className="m-0 text-xs leading-[1.35] text-primary/70 sm:text-sm md:text-base"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5, ease }}
-              >
-                React, TypeScript and Node.js engineer building high-load product interfaces, SSR platforms, commerce video flows
-                and 3D/data-heavy tools.
-              </motion.p>
 
               <motion.a
                 href={`mailto:${profile.email}`}

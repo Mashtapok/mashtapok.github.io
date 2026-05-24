@@ -17,9 +17,9 @@ export function About() {
         >
           <WordsPullUpMultiStyle
             segments={[
-              { text: 'I am Stepan Mashtakov,', className: 'font-normal' },
-              { text: 'a full stack software engineer.', className: 'font-serif italic' },
-              { text: 'I build high-load product interfaces with React, TypeScript and Node.js.', className: 'font-normal' },
+              // { text: 'I am Stepan Mashtakov,', className: 'font-normal' },
+              { text: 'I am a full stack software engineer.', className: 'font-serif italic' },
+              { text: 'I build high-load product interfaces and Web Apps with React, TypeScript and Node.js.', className: 'font-normal' },
             ]}
           />
         </h2>

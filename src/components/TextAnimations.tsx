@@ -54,7 +54,7 @@ export function WordsPullUpMultiStyle({ segments, className = '' }: { segments: 
   return (
     <span ref={ref} className={`inline-flex flex-wrap justify-center ${className}`}>
       {words.map(({ word, className: wordClassName, segmentIndex }, index) => (
-        <span key={`${word}-${segmentIndex}-${index}`} className="inline-block overflow-hidden pr-[0.22em]">
+        <span key={`${word}-${segmentIndex}-${index}`} className="inline-block pr-[0.22em]">
           <motion.span
             className={`inline-block ${wordClassName}`}
             initial={{ y: 20 }}

@@ -18,7 +18,7 @@ export function Footer() {
         >
           <p className="mb-4 text-xs uppercase tracking-[0.2em] text-primary/60">Contacts</p>
           <h2 className="bg-gradient-to-br from-[#fff6d8] via-[#e1e0cc] to-[#c58a54] bg-clip-text py-4 text-4xl font-medium tracking-tight text-transparent md:text-7xl">
-            Let&apos;s build <br /> high-load interfaces
+            Let&apos;s build <br /> software that matters
           </h2>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-primary/70">
