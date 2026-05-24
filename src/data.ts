@@ -83,7 +83,11 @@ export const experience = [
     company: "Wildberries",
     role: "Senior Software engineer",
     period: "September 2024 — Present",
-    previewVideo: null,
+    preview: {
+      type: "video",
+      src: "/assets/wibes-preview.webm",
+      label: "Wibes product preview",
+    },
     summary: [
       { text: "Founding frontend engineer for ", href: null },
       { text: "Wibes.ru", href: "https://wibes.ru" },
@@ -97,7 +101,11 @@ export const experience = [
     company: "VK",
     role: "Software engineer",
     period: "December 2022 - September 2024",
-    previewVideo: "/assets/vk.mov",
+    preview: {
+      type: "video",
+      src: "/assets/vk-preview.webm",
+      label: "VK Mail product preview",
+    },
     summary: [
       {
         text: "Developed the web version of Mail.ru, a large-scale email platform with 25M+ monthly active users.",
@@ -109,7 +117,11 @@ export const experience = [
     company: "Nauka",
     role: "Frontend developer",
     period: "September 2020 - December 2022",
-    previewVideo: null,
+    preview: {
+      type: "image",
+      src: "/assets/nauka.webp",
+      label: "Nauka project preview",
+    },
     summary: [
       {
         text: "Worked across enterprise web projects involving data visualization, 3D editors, CRM systems and real-time communication tools.",

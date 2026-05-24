@@ -1,4 +1,4 @@
-import { ArrowRight, Check, MapPin } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { accentText, cardEase, experience, featureVideo, primaryText, skillGroups } from '../data';
@@ -50,6 +50,46 @@ type ExperienceCardProps = {
   index: number;
 };
 
+type ProjectPreviewProps = {
+  preview: (typeof experience)[number]['preview'];
+  index: number;
+};
+
+function ProjectPreview({ preview, index }: ProjectPreviewProps) {
+  const tiltClass =
+    index % 2 === 0
+      ? 'rotate-[1deg] [transform:rotateY(-8deg)_rotateX(2deg)] group-hover:[transform:rotateY(-5deg)_rotateX(1deg)]'
+      : 'rotate-[-1deg] [transform:rotateY(8deg)_rotateX(2deg)] group-hover:[transform:rotateY(5deg)_rotateX(1deg)]';
+
+  return (
+    <div className="relative mx-auto w-full max-w-[18rem] [perspective:900px] md:max-w-full">
+      <div className="pointer-events-none absolute -inset-4 rounded-[1.5rem] bg-primary/10 opacity-45 blur-2xl transition-opacity duration-500 group-hover:opacity-70" />
+      <div
+        className={`relative rounded-[1.15rem] border border-white/10 bg-[#050505] p-1.5 shadow-2xl shadow-black/50 transition-transform duration-700 ${tiltClass}`}
+      >
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[0.85rem] border border-white/[0.08] bg-black">
+          {preview.type === 'video' ? (
+            <video
+              className="h-full w-full object-fill"
+              src={preview.src}
+              aria-label={preview.label}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            />
+          ) : (
+            <img className="h-full w-full object-fill" src={preview.src} alt={preview.label} loading="lazy" />
+          )}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/[0.05]" />
+          <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ExperienceCard({ item, index }: ExperienceCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -66,7 +106,7 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(222,219,200,0.11),transparent_32%),linear-gradient(135deg,rgba(242,179,109,0.09),transparent_45%)] opacity-60 transition-opacity duration-500 group-hover:opacity-100" />
 
       <div className="relative grid gap-0 md:grid-cols-[0.82fr_1.18fr]">
-        <div className="relative flex min-h-[260px] flex-col justify-between gap-8 border-b border-white/[0.08] p-5 sm:p-6 md:border-b-0 md:border-r md:p-7">
+        <div className="relative flex min-h-[300px] flex-col justify-between gap-8 border-b border-white/[0.08] p-5 sm:p-6 md:border-b-0 md:border-r md:p-7">
           <div className="mt-4">
             <p className="mb-3 text-xs uppercase tracking-[0.2em]" style={{ color: accentText }}>
               {item.role}
@@ -76,23 +116,7 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
             </h3>
           </div>
 
-          {item.previewVideo ? (
-            <div className="max-w-[18rem] overflow-hidden rounded-xl border border-white/[0.08] bg-black/40 p-1 shadow-2xl shadow-black/30 md:max-w-full">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-black">
-                <video
-                  className="h-full w-full object-cover"
-                  src={item.previewVideo}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/[0.03]" />
-                <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
-              </div>
-            </div>
-          ) : null}
+          <ProjectPreview preview={item.preview} index={index} />
         </div>
 
         <div className="flex min-h-[220px] flex-col justify-between p-5 sm:p-6 md:p-7">
@@ -113,7 +137,7 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
                   href={segment.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:text-primary/80"
+                  className="relative inline-block text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:text-primary/80"
                 >
                   {segment.text}
                 </a>
