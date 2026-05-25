@@ -220,25 +220,24 @@ export function Hero() {
               <h1 className="m-0 font-medium leading-[0.85] tracking-[-0.07em]">
                 <WordsPullUp
                   text={profile.name}
-                  className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[11vw] xl:text-[10vw] 2xl:text-[10vw]"
+                  className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[11vw] xl:text-[10vw] 2xl:text-[8vw]"
                 />
               </h1>
-            </div>
 
-            <div className="col-span-12 flex max-w-xl flex-col items-start gap-5 justify-self-start sm:max-w-md lg:col-span-4 lg:justify-self-end">
-
-              <motion.a
-                href={`mailto:${profile.email}`}
-                className="group flex items-center gap-2 rounded-full bg-primary py-1.5 pl-5 pr-1.5 text-sm font-medium text-black transition-[gap] duration-300 hover:gap-3 sm:text-base"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7, ease }}
-              >
-                Write me
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
-                  <ArrowRight className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
-                </span>
-              </motion.a>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <motion.a
+                  href="/#contacts"
+                  className="group inline-flex items-center gap-2 rounded-full border border-primary/70 bg-transparent py-1.5 pl-5 pr-1.5 text-sm font-medium text-primary transition-[gap,background-color,color,border-color] duration-300 hover:gap-3 hover:border-primary hover:bg-primary hover:text-black sm:text-base"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7, ease }}
+                >
+                  Write me
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-black transition-[background-color,color,transform] duration-300 group-hover:scale-110 group-hover:bg-black group-hover:text-primary sm:h-10 sm:w-10">
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                  </span>
+                </motion.a>
+              </div>
             </div>
           </div>
         </div>

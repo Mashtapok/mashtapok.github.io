@@ -1,28 +1,27 @@
-import { useRef } from 'react';
-import { useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { primaryText } from '../data';
-import { AnimatedLetter, WordsPullUpMultiStyle } from './TextAnimations';
 
 export function About() {
-  const ref = useRef<HTMLParagraphElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.2'] });
-
   return (
     <section id="about" className="bg-black px-4 py-16 sm:px-6 sm:py-20 md:py-24">
       <div className="mx-auto max-w-6xl rounded-[1.75rem] bg-[#101010] px-5 py-16 text-center sm:px-8 sm:py-20 md:px-12 md:py-24">
         <p className="mb-8 text-[10px] uppercase tracking-[0.2em] text-primary/70 sm:text-xs">About me</p>
-        <h2
-          className="mx-auto max-w-4xl text-3xl font-normal leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
+        <motion.div
+          className="mx-auto max-w-4xl"
           style={{ color: primaryText }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
-          <WordsPullUpMultiStyle
-            segments={[
-              // { text: 'I am Stepan Mashtakov,', className: 'font-normal' },
-              { text: 'I am a full stack software engineer.', className: 'font-serif italic' },
-              { text: 'I build high-load product interfaces and Web Apps with React, TypeScript and Node.js.', className: 'font-normal' },
-            ]}
-          />
-        </h2>
+          <h2 className="font-serif text-4xl italic leading-none sm:text-5xl md:text-6xl lg:text-7xl">
+            I am a full stack software engineer.
+          </h2>
+          <p className="mx-auto mt-6 max-w-3xl text-xl leading-[1.25] text-primary/80 sm:text-2xl md:text-3xl">
+            I've been writing code for 6 years, building high-load product interfaces and Web Apps with React, TypeScript
+            and Node.js.
+          </p>
+        </motion.div>
       </div>
     </section>
   );

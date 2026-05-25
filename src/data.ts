@@ -26,54 +26,41 @@ export const profile = {
   telegramLabel: "telegram",
   linkedin: "https://linkedin.com/in/mashtapok",
   linkedinLabel: "linkedin",
+  cv: "/assets/Stepan_Mashtakov_fullstack.pdf",
+  cvLabel: "cv",
 };
 
 export const navItems = [
   { label: "About me", href: "#about" },
-  { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Contacts", href: "#contacts" },
 ];
 
 export const skillGroups = [
   {
-    number: "01",
-    title: "Frontend systems.",
+    title: "Frontend",
+    size: "large",
     items: [
-      "React.js, TypeScript, JavaScript",
-      "Next.js, Vue.js, Nuxt",
-      "TanStack Query, WebSockets",
-      "Tailwind, CSS Modules, Accessibility",
+      "React.js",
+      "TypeScript",
+      "Next.js",
+      "Vue.js",
+      "Nuxt",
+      "d3.js",
+      "Three.js",
     ],
   },
   {
-    number: "02",
-    title: "Backend & data.",
+    title: "Backend",
+    size: "large",
     items: [
-      "Node.js, Express.js, NestJS",
-      "PostgreSQL, Prisma, MongoDB",
-      "REST APIs and BFF services",
-      "SSR data flows and caching",
-    ],
-  },
-  {
-    number: "03",
-    title: "Quality & delivery.",
-    items: [
-      "Playwright, Cypress, Jest, Vitest",
-      "Docker, GitHub Actions, GitLab CI",
-      "Grafana and Sentry",
-      "Webpack and Vite",
-    ],
-  },
-  {
-    number: "04",
-    title: "Visual tooling.",
-    items: [
-      "Three.js and d3.js",
-      "3D editors and data visualization",
-      "Motion-heavy UI systems",
-      "Claude Code and Cursor workflows",
+      "Node.js",
+      "Express.js",
+      "NestJS",
+      "PostgreSQL",
+      "Prisma",
+      "MongoDB",
+      "Docker",
     ],
   },
 ];
@@ -108,7 +95,7 @@ export const experience = [
     },
     summary: [
       {
-        text: "Developed the web version of Mail.ru, a large-scale email platform with 25M+ monthly active users.",
+        text: "Developed the web version of Mail.ru, a large-scale email platform with 25M+ monthly active users, building high-load features and rich text editing functionality",
         href: null,
       },
     ],
@@ -124,7 +111,7 @@ export const experience = [
     },
     summary: [
       {
-        text: "Worked across enterprise web projects involving data visualization, 3D editors, CRM systems and real-time communication tools.",
+        text: "Worked across enterprise web projects involving data visualization, 3D editors, CRM systems and real-time communication tools",
         href: null,
       },
     ],

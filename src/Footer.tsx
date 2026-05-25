@@ -21,7 +21,7 @@ export function Footer() {
             Let&apos;s build <br /> software that matters
           </h2>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-primary/70">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-lg text-primary/70 sm:text-xl">
             <a className="transition-colors hover:text-primary" href={`mailto:${profile.email}`}>
               {profile.emailLabel}
             </a>
@@ -35,6 +35,10 @@ export function Footer() {
             </a>
             <a className="transition-colors hover:text-primary" href={profile.github} target="_blank" rel="noreferrer">
               {profile.githubLabel}
+            </a>
+            <span className="hidden h-1 w-1 rounded-full bg-primary/30 sm:block" />
+            <a className="transition-colors hover:text-primary" href={profile.cv} target="_blank" rel="noreferrer">
+              {profile.cvLabel}
             </a>
           </div>
         </motion.div>
