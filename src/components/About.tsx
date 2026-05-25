@@ -3,7 +3,7 @@ import { primaryText } from '../data';
 
 export function About() {
   return (
-    <section id="about" className="bg-black px-4 py-16 sm:px-6 sm:py-20 md:py-24">
+    <section id="about" className="relative z-10 bg-transparent px-4 py-16 sm:px-6 sm:py-20 md:py-24">
       <div className="mx-auto max-w-6xl rounded-[1.75rem] bg-[#101010] px-5 py-16 text-center sm:px-8 sm:py-20 md:px-12 md:py-24">
         <p className="mb-8 text-[10px] uppercase tracking-[0.2em] text-primary/70 sm:text-xs">About me</p>
         <motion.div

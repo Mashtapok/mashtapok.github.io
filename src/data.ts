@@ -15,12 +15,10 @@ export const ease = [0.16, 1, 0.3, 1] as const;
 export const cardEase = [0.22, 1, 0.36, 1] as const;
 
 export const profile = {
-  name: "Stepan Mashtakov",
+  name: "Stepan\nMashtakov",
   role: "Full stack Software Engineer",
   email: "mashtakov.dev@gmail.com",
   emailLabel: "email",
-  github: "https://github.com/mashtapok",
-  githubLabel: "github",
   phone: "+7 (747) 702-83-27",
   telegram: "https://t.me/gowxking",
   telegramLabel: "telegram",

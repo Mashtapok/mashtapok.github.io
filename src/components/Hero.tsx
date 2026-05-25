@@ -20,7 +20,6 @@ import {
   primaryText,
   profile,
 } from '../data';
-import { WordsPullUp } from './TextAnimations';
 
 const heroVideoVertexShader = `
   varying vec2 vUv;
@@ -178,7 +177,7 @@ function HeroVideoLayer() {
 
 export function Hero() {
   return (
-    <section className="h-screen bg-black p-4 md:p-6">
+    <section className="relative z-10 h-screen bg-transparent p-4 md:p-6">
       <div className="relative h-full overflow-hidden rounded-2xl md:rounded-[2rem]">
         <video className="absolute inset-0 z-0 h-full w-full object-cover" autoPlay loop muted playsInline preload="auto">
           {heroVideoSources.map((source) => (
@@ -216,13 +215,19 @@ export function Hero() {
         <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-6 sm:px-6 md:px-8 md:pb-8 lg:px-10 lg:pb-10">
           <div className="grid grid-cols-12 items-end gap-y-5 md:gap-6">
             <div className="col-span-12 lg:col-span-8">
-              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-primary/70 sm:text-sm">{profile.role}</p>
-              <h1 className="m-0 font-medium leading-[0.85] tracking-[-0.07em]">
-                <WordsPullUp
-                  text={profile.name}
-                  className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[11vw] xl:text-[10vw] 2xl:text-[8vw]"
-                />
-              </h1>
+              <motion.p className="mb-3 text-xs uppercase tracking-[0.2em] text-primary/70 sm:text-sm"
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.15, ease }}>
+                {profile.role}</motion.p>
+              <motion.h1
+                className="m-0 whitespace-pre-line text-[18vw] font-medium leading-[0.85] tracking-[-0.03em] text-primary sm:text-[16vw] md:text-[14vw] lg:text-[11vw] xl:text-[10vw] 2xl:text-[8vw] ml-[-10px]"
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.4, ease }}
+              >
+                {profile.name}
+              </motion.h1>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <motion.a

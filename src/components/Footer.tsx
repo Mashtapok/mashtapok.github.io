@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { profile } from './data';
+import { profile } from '../data';
 
 export function Footer() {
   return (
-    <footer id="contacts">
+    <footer id="contacts" className="relative z-10">
       <LampContainer>
         <motion.div
           initial={{ opacity: 0.5, y: 100 }}
@@ -33,6 +33,7 @@ export function Footer() {
             <a className="transition-colors hover:text-primary" href={profile.linkedin} target="_blank" rel="noreferrer">
               {profile.linkedinLabel}
             </a>
+            <span className="hidden h-1 w-1 rounded-full bg-primary/30 sm:block" />
             <a className="transition-colors hover:text-primary" href={profile.github} target="_blank" rel="noreferrer">
               {profile.githubLabel}
             </a>
@@ -50,10 +51,9 @@ export function Footer() {
 export const LampContainer = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
   return (
     <div
-      className={`relative z-0 flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black ${className}`}
+      className={`relative z-0 flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-transparent ${className}`}
     >
-      <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.12]" />
-      <div className="relative isolate z-0 flex w-full flex-1 scale-y-125 items-center justify-center">
+      <div className="relative isolate z-0 flex w-full flex-1 scale-x-[0.82] scale-y-100 items-center justify-center sm:scale-x-100 sm:scale-y-125">
         <motion.div
           initial={{ opacity: 0.35, width: '15rem' }}
           whileInView={{ opacity: 1, width: '30rem' }}
@@ -65,7 +65,7 @@ export const LampContainer = ({ children, className = '' }: { children: React.Re
           style={{
             backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
           }}
-          className="absolute inset-auto right-1/2 h-56 w-[30rem] max-w-[calc(50vw-1.25rem)] overflow-visible bg-gradient-conic from-[#f2b36d] via-transparent to-transparent text-white sm:max-w-none [--conic-position:from_70deg_at_center_top]"
+          className="absolute inset-auto right-1/2 h-56 w-[30rem] overflow-visible bg-gradient-conic from-[#f2b36d] via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
         >
           <div className="absolute bottom-0 left-0 z-20 h-40 w-full bg-black [mask-image:linear-gradient(to_top,white,transparent)]" />
           <div className="absolute bottom-0 left-0 z-20 h-full w-1/2 bg-black sm:w-40 [mask-image:linear-gradient(to_right,white,transparent)]" />
@@ -81,7 +81,7 @@ export const LampContainer = ({ children, className = '' }: { children: React.Re
           style={{
             backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
           }}
-          className="absolute inset-auto left-1/2 h-56 w-[30rem] max-w-[calc(50vw-1.25rem)] bg-gradient-conic from-transparent via-transparent to-[#f2b36d] text-white sm:max-w-none [--conic-position:from_290deg_at_center_top]"
+          className="absolute inset-auto left-1/2 h-56 w-[30rem] bg-gradient-conic from-transparent via-transparent to-[#f2b36d] text-white [--conic-position:from_290deg_at_center_top]"
         >
           <div className="absolute bottom-0 right-0 z-20 h-full w-1/2 bg-black sm:w-40 [mask-image:linear-gradient(to_left,white,transparent)]" />
           <div className="absolute bottom-0 right-0 z-20 h-40 w-full bg-black [mask-image:linear-gradient(to_top,white,transparent)]" />
@@ -110,7 +110,7 @@ export const LampContainer = ({ children, className = '' }: { children: React.Re
           className="absolute inset-auto z-50 h-0.5 w-[30rem] max-w-[calc(100vw-2.5rem)] -translate-y-[7rem] bg-[#ffd0a3] sm:max-w-none"
         />
 
-        <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-black" />
+        <div className="absolute inset-auto z-40 h-44 w-[125%] -translate-y-[12.5rem] bg-black sm:w-full" />
       </div>
 
       <div className="relative z-50 flex -translate-y-80 flex-col items-center px-5">{children}</div>
