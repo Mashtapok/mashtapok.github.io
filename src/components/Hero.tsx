@@ -177,7 +177,7 @@ function HeroVideoLayer() {
 
 export function Hero() {
   return (
-    <section className="relative z-10 h-screen bg-transparent p-4 md:p-6">
+    <section className="relative z-10 h-screen !h-[100dvh] bg-transparent p-4 md:p-6">
       <div className="relative h-full overflow-hidden rounded-2xl md:rounded-[2rem]">
         <video className="absolute inset-0 z-0 h-full w-full object-cover" autoPlay loop muted playsInline preload="auto">
           {heroVideoSources.map((source) => (
@@ -196,7 +196,7 @@ export function Hero() {
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className="text-[10px] transition-colors sm:text-xs md:text-sm"
+                  className="text-xs transition-colors md:text-sm"
                   style={{ color: 'rgba(225, 224, 204, 0.8)' }}
                   onMouseEnter={(event) => {
                     event.currentTarget.style.color = primaryText;
