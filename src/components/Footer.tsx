@@ -34,10 +34,6 @@ export function Footer() {
               {profile.linkedinLabel}
             </a>
             <span className="hidden h-1 w-1 rounded-full bg-primary/30 sm:block" />
-            <a className="transition-colors hover:text-primary" href={profile.github} target="_blank" rel="noreferrer">
-              {profile.githubLabel}
-            </a>
-            <span className="hidden h-1 w-1 rounded-full bg-primary/30 sm:block" />
             <a className="transition-colors hover:text-primary" href={profile.cv} target="_blank" rel="noreferrer">
               {profile.cvLabel}
             </a>
