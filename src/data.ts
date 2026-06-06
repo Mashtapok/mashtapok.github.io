@@ -103,8 +103,8 @@ export const experience = [
     role: "Frontend developer",
     period: "September 2020 - December 2022",
     preview: {
-      type: "image",
-      src: "/assets/nauka.webp",
+      type: "video",
+      src: "/assets/nauka.webm",
       label: "Nauka project preview",
     },
     summary: [
